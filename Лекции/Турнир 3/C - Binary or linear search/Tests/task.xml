@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CATS version="1.11">
+<Problem title="Binary/linear search" lang="ru" tlimit="1" mlimit="4000"
+  author="" inputFile="*STDIN" outputFile="*STDOUT"
+  saveInputPrefix="50B" saveOutputPrefix="50B" saveAnswerPrefix="50B">
+
+
+<ProblemStatement>
+  <p>Написать функцию
+  </p>
+  <p><code><![CDATA[Iterator Find&lt;T, Iterator&gt;(const T& value, Iterator first, Iterator last)]]></code>,</p>
+  <p>
+  которая принимает элемент и итераторы на отсортированную коллекцию и возвращает итератор на требуемый элемент (в случае отсутствия такого элемента,
+  функция должна вернуть last).</p>
+  <p> В зависимости от типа итератора, данная функция должна использовать бинарный или линейный поиск (Бинарный поиск, если итератор является Random Access).</p>
+</ProblemStatement>
+
+<Linter name="cpplint" stage="before" src="cpplint.py"/>
+
+<Import type="checker" guid="std.nums"/>
+
+<Module type="solution" src="main.cpp" main="find.h" de_code="107"></Module>
+
+<Test rank="1"><In>0</In><Out>1</Out></Test>
+
+</Problem>
+</CATS>

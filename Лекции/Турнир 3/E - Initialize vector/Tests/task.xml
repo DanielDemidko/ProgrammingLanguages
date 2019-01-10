@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CATS version="1.11">
+<Problem title="Initialize vector" lang="ru" tlimit="1" mlimit="4000"
+  author="" inputFile="*STDIN" outputFile="*STDOUT"
+  saveInputPrefix="50B" saveOutputPrefix="50B" saveAnswerPrefix="50B">
+
+
+<ProblemStatement>
+  <p>
+    Вам необходимо написать функцию <code>initialize_vector(value, dim1, dim2, ...)</code>, принимающую значение и размерности, и возвращающую вектор заданных размерностей, заполненный этим значением.
+  </p>
+  <p>
+    Пример использования такой функции может быть следующим:
+  </p><p>
+      <pre>
+          <code>
+<![CDATA[vector&lt;vector&lt;vector&lt;int&gt;&gt;&gt; v = initialize_vector(-1, 100, 50, 30)]]>
+          </code>
+      </pre>
+  </p><p>
+      Для реализации требуется использовать <a href="https://en.cppreference.com/w/cpp/language/parameter_pack"><code>variadic templates</code></a>
+  </p>
+</ProblemStatement>
+
+<Linter name="cpplint" stage="before" src="cpplint.py"/>
+
+<Import type="checker" guid="std.nums"/>
+
+<Module type="solution" src="main.cpp" main="initialize_vector.h" de_code="107"></Module>
+
+<Test rank="1"><In>0</In><Out>1</Out></Test>
+
+</Problem>
+</CATS>

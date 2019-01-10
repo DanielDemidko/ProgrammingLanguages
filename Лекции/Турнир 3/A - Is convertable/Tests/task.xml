@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CATS version="1.11">
+<Problem title="Is convertable" lang="ru" tlimit="1" mlimit="4000"
+  author="" inputFile="*STDIN" outputFile="*STDOUT"
+  saveInputPrefix="50B" saveOutputPrefix="50B" saveAnswerPrefix="50B">
+
+
+<ProblemStatement>
+  <p>
+    Вам необходимо написать метафункцию
+    <code><![CDATA[is_customly_convertible&lt;A, B&gt;]]></code>
+    , которая проверяет, существует ли специализация структуры <code>Convert</code> для типов A и B.
+  </p><p>
+    Интерфейс функции должен соответствовать аналогичным функциям из модуля <a href="https://en.cppreference.com/w/cpp/header/type_traits"><code>type_traits</code></a>, например <a href="https://en.cppreference.com/w/cpp/types/is_same"><code>is_same</code></a>
+  </p>
+  <p>
+      Специализация структуры <code>Convert</code> может выглядеть следующим образом:
+  </p><p>
+      <pre><code>
+<![CDATA[template &lt; &gt;
+struct Convert&lt;int, float&gt; {
+    float operator()(const int&amp; a) {
+        return a;
+    }
+};]]>
+      </code></pre>
+  </p>
+  <p>
+    Также необходимо реализовать 2 структуры: <code>NoTriviallyConstructible</code> --  структуру без дефолтного конструктора и <code>NoCopyConstructible</code> -- структуру без конструктора копирования. (Это единственные требования к структурам, все остальное -- неважно)
+  </p>
+  <p>
+    Для вышеописанных структур требуется добавить специализацию функтора <code>Convert</code>: для (NoTriviallyConstructible, int) и (NoCopyConstructible, NoTriviallyConstructible) и реализовать ей оператор () <em>произвольным образом</em>.
+  </p>
+</ProblemStatement>
+
+<Linter name="cpplint" stage="before" src="cpplint.py"/>
+
+<Import type="checker" guid="std.nums"/>
+
+<Module type="solution" src="main.cpp" main="is_customly_convertible.h" de_code="107"></Module>
+
+<Test rank="1"><In>0</In><Out>1</Out></Test>
+
+</Problem>
+</CATS>

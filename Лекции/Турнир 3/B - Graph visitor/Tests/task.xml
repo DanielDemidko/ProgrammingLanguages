@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CATS version="1.11">
+<Problem title="Graph visitor" lang="ru" tlimit="1" mlimit="4000"
+  author="" inputFile="*STDIN" outputFile="*STDOUT"
+  saveInputPrefix="50B" saveOutputPrefix="50B" saveAnswerPrefix="50B">
+
+
+<ProblemStatement>
+  <p>Реализовать шаблонный класс визитора со следующим интерфейсом для использования в алгоритме поиска в ширину в <em>неориентированном</em> графе.
+  </p>
+  <p><pre><code>
+  <![CDATA[template&lt;Vertex&gt; 
+  class BfsVisitor]]> {
+    public:
+      void ExamineVertex(const Vertex&amp; vertex);
+      void DiscoverVertex(const Vertex&amp; vertex);
+      
+      size_t DistanceTo(const Vertex&amp; target) const;
+      Vertex Parent(const Vertex&amp; vertex) const;
+  }
+  </code></pre>
+  </p>
+  <p>
+  Объект данного класса будет использован функцией обхода графа в ширину, аналогичной <a href="https://www.boost.org/doc/libs/1_66_0/libs/graph/doc/breadth_first_search.html">данной</a>. Метод <code> ExamineVertex </code> 
+  будет вызван в момент извлечения вершины из очереди, метод <code>DiscoverVertex</code> будет вызван в момент добавления вершины в очередь.
+  </p>
+  <p>
+      После обхода графа визитор должен хранить кратчайшие расстояния от начальной
+      вершины до всех остальных. Для получения расстояния до вершины будет использован метод <code>DistanceTo</code>.
+  </p>
+  <p>
+      Также, в процессе обхода в ширину визитор должен построить соответствующее такому обходу остовное дерево графа.
+      Метод <code>Parent</code> будет использован для получения предка каждой вершины в таком графе. <em>Родителем корневой вершины является она сама.</em>
+  </p>
+  <p>
+      Экземпляр визитора передается в функцию по значению, и для эффективного копирования
+      его размер должен быть не больше размера <code>shared_ptr</code>.
+  </p>
+</ProblemStatement>
+
+
+
+<Import type="checker" guid="std.nums"/>
+
+<Import type="linter" guid="std.cpplint"/>
+
+<Module type="solution" src="main.cpp" main="visitor.h" de_code="107"></Module>
+
+<Test rank="1"><In>0</In><Out>1</Out></Test>
+
+</Problem>
+</CATS>

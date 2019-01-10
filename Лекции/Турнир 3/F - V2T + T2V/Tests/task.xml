@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CATS version="1.11">
+<Problem title="V2T + T2V" lang="ru" tlimit="1" mlimit="4000M"
+  author="" inputFile="*STDIN" outputFile="*STDOUT"
+  saveInputPrefix="50B" saveOutputPrefix="50B" saveAnswerPrefix="50B">
+<ProblemStatement>
+    <p>Вам необходимо написать преобразование <code>tuple_to_vector</code> и обратное для него <code>vector_to_tuple</code></p>
+    <pre> </pre>
+    <p><code><![CDATA[tuple&lt;vector&lt;T1&gt;, vector&lt;T2&gt;, vector&lt;T3&gt;, ...&gt; ===&gt; vector&lt;tuple&lt;T1, T2, T3, ...&gt;&gt;]]></code></p>
+    <p><code><![CDATA[vector&lt;tuple&lt;T1, T2, T3, ...&gt;&gt; ===&gt; tuple&lt;vector&lt;T1&gt;, vector&lt;T2&gt;, vector&lt;T3&gt;, ...&gt;]]></code></p>
+    <pre>
+        <code>
+            <![CDATA[tuple&lt;vector&lt;int&gt;, vector&lt;double&gt;, vector&lt;char&gt;&gt; tpl;]]>
+            <![CDATA[vector&lt;tuple&lt;int, double, char&gt;&gt; vec;]]>
+            <![CDATA[static_assert(std::is_same_v&lt;decltype(vector_to_tuple(vec)), decltype(tpl)&gt;);]]>
+            <![CDATA[static_assert(std::is_same_v&lt;decltype(tuple_to_vector(tpl)), decltype(vec)&gt;);]]>
+        </code>
+    </pre>
+    <pre> </pre>
+    <p>Если возможно, функции должны возвращать 'удобные' типы вместо <code>std::tuple</code>, а так же принимать их в кач-ве параметра</p>
+    <p>В частности <code>tuple</code> размера 2 должен быть преобразован в <code>pair</code>, а размера 1 в сам тип</p>
+    <pre>
+        <code>
+            <![CDATA[tuple&lt;vector&lt;int&gt;, vector&lt;double&gt;&gt; tpl;]]>
+            <![CDATA[vector&lt;pair&lt;int, double&gt;&gt; vec = tuple_to_vector(tpl); // tuple размера 2 преобразовывается в pair]]>
+            <![CDATA[vector&lt;tuple&lt;int, double&gt;&gt; vec2;]]>
+            <![CDATA[pair&lt;vector&lt;int&gt;, vector&lt;double&gt;&gt; tpl2 = vector_to_tuple(vec2)]]>
+
+            // *******************
+
+            <![CDATA[tuple&lt;vector&lt;int&gt;&gt; tpl;]]>
+            <![CDATA[vector&lt;int&gt; vec = tuple_to_vector(tpl); // tuple размера 1 преобразовывается в сам тип]]>
+            <![CDATA[vector&lt;tuple&lt;int&gt;&gt; vec2;]]>
+            <![CDATA[vector&lt;int&gt; tpl2 = vector_to_tuple(vec2)]]>
+
+            // *******************
+
+            <![CDATA[vector&lt;int&gt; vec;]]>
+            <![CDATA[vec = vector_to_tuple(vec);]]>
+            <![CDATA[vec = tuple_to_vector(vec);]]>
+
+            // *******************
+
+            <![CDATA[vector&lt;pair&lt;int, char&gt;&gt; vp;]]>
+            <![CDATA[pair&lt;vector&lt;int&gt;, vector&lt;char&gt;&gt; pv = vector_to_tuple(vp);]]>
+            <![CDATA[vp = tuple_to_vector(pv);]]>
+        </code>
+    </pre>
+</ProblemStatement>
+
+<!--
+<InputFormat>
+    <p>
+    </p>
+</InputFormat>
+-->
+
+<OutputFormat>
+    <p>Файл с решением должен содержать функции из условия</p>
+</OutputFormat>
+
+<Linter name="cpplint" stage="before" src="cpplint.py"/>
+
+<Import type="checker" guid="std.nums"/>
+<Module type="solution" src="main.cpp" main="v2t_t2v.h" de_code="107"></Module>
+
+<Test rank="1"><In>0</In><Out>0</Out></Test>
+
+</Problem>
+</CATS>

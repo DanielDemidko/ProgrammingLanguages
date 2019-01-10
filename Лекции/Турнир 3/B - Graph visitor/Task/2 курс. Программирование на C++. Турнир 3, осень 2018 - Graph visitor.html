@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="https://imcs.dvfu.ru/cats/static/images/favicon.ico" type="image/x-icon"><title>2 курс. Программирование на C++. Турнир 3, осень 2018   - Graph visitor</title>
+
+<link rel="stylesheet" type="text/css" href="2%20%D0%BA%D1%83%D1%80%D1%81.%20%D0%9F%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%BD%D0%B0%20C++.%20%D0%A2%D1%83%D1%80%D0%BD%D0%B8%D1%80%203,%20%D0%BE%D1%81%D0%B5%D0%BD%D1%8C%202018%20-%20Graph%20visitor_files/main.css">
+<!--[if IE]><link rel="stylesheet" type="text/css" href="css/ie.css"><![endif]-->
+  <script type="text/javascript" src="2%20%D0%BA%D1%83%D1%80%D1%81.%20%D0%9F%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%BD%D0%B0%20C++.%20%D0%A2%D1%83%D1%80%D0%BD%D0%B8%D1%80%203,%20%D0%BE%D1%81%D0%B5%D0%BD%D1%8C%202018%20-%20Graph%20visitor_files/jquery.js"></script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+function set_tex() {
+  var tex = $(this);
+  tex.data({ lite: tex.html() });
+  var magic = '~!!!~';
+  var t = tex.attr('title');
+  t = t.replace(/(\\[a-zA-Z]+)/g, '$1' + magic);
+  t = t.replace(/([a-zA-Z0-9},])\s+(?=[a-zA-Z])/g, '$1\\,');
+  t = t.replace(new RegExp(magic, 'g'), '');
+  tex.html("\\(" + t + '\\)');
+}
+
+function unset_tex() {
+  var tex = $(this);
+  var lite = tex.data().lite;
+  if (lite)
+    tex.html(lite);
+}
+
+function apply_mathjax(p) {
+  MathJax.Hub.Queue(
+    function() { p.find('span.TeX').each(set_tex); },
+    [ 'Typeset', MathJax.Hub, p[0] ]);
+}
+</script>
+<script type="text/x-mathjax-config;executed=true">
+MathJax.Hub.Config({
+  TeX: {
+    Macros: { deg: '^\\circ' }
+  },
+  'HTML-CSS': { scale: 100 },
+  SVG: { scale: 100 },
+  CommonHTML: { scale: 100 },
+  tex2jax: { ignoreClass: 'problem_text', processClass: 'TeX' },
+  skipStartupTypeset: true
+});
+MathJax.Hub.Register.StartupHook('onLoad', function () {
+    $('div.problem_text').each(function() {
+    var p = $(this);
+    if (!p.find('.basic_math')[0].checked)
+      apply_mathjax(p);
+  });
+});
+</script>
+<script type="text/javascript" src="2%20%D0%BA%D1%83%D1%80%D1%81.%20%D0%9F%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%BD%D0%B0%20C++.%20%D0%A2%D1%83%D1%80%D0%BD%D0%B8%D1%80%203,%20%D0%BE%D1%81%D0%B5%D0%BD%D1%8C%202018%20-%20Graph%20visitor_files/MathJax.js"></script>
+<script type="text/javascript">window.MathJax || document.write('<script src="js/lib/MathJax/MathJax.js?config=TeX-AMS_CHTML"><\/script>')</script>
+<script type="text/javascript" src="2%20%D0%BA%D1%83%D1%80%D1%81.%20%D0%9F%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%20%D0%BD%D0%B0%20C++.%20%D0%A2%D1%83%D1%80%D0%BD%D0%B8%D1%80%203,%20%D0%BE%D1%81%D0%B5%D0%BD%D1%8C%202018%20-%20Graph%20visitor_files/jquery.js"></script>
+<style>
+  a.problem_menu_trigger { font-size: small; color: inherit; padding: 1px 3px; background-color: #eeeeee; }
+  a.problem_menu_trigger:hover { font-size: medium; }
+  div.problem_menu { display: none; width: 100%; background-color: #eeeeee; }
+  div.problem_menu ul { list-style-type: none; padding: 0; }
+  div.problem_menu ul li { display: inline-block; padding: 3px 10px; border-right: 1px solid; }
+  div.problem_menu ul li a.problem_list_link { display: inline-block; padding-top: 2px; }
+  div.problem_menu input[type=checkbox] { display: none; }
+  div.problem_menu input[type=checkbox] + span:after { content: '\2610'; }
+  div.problem_menu input[type=checkbox]:checked + span:after { content: '\2611'; }
+  div.problem_menu ul li.last_verdict { padding-top: 2px; padding-bottom: 2px; vertical-align: bottom; }
+  div.problem_menu ul li.last_verdict span { display: inline-block; vertical-align: bottom; }
+  div.problem_menu li.langs { font-weight: bold; }
+  div.problem_menu li.langs a { font-weight: normal; }
+
+  div.problem_text table.problem_header { width: 100%; }
+  div.problem_text p, div.problem_text ul, div.problem_text ol { hyphens: auto; max-width: 1000px; text-align: justify; text-indent1: 3em; }
+  div.problem_text p span { text-indent: 0; }
+  div.problem_text table.thin_border { border-collapse: collapse; border: 1px; }
+  div.problem_text table.thin_border td, div.problem_text table.thin_border th { border: 1px solid black; padding: 2px; }.last_verdict .verdict { padding: 0; height: 100%; width: 4em; }
+.last_verdict .verdict table { border-collapse: collapse; width: 100%; height: 100%; color: inherit; font-weight: inherit; }
+.last_verdict .verdict table td { padding: 0 0 0 2px; }
+.last_verdict .verdict table td:first-child { width: 2em; }
+.last_verdict .verdict table td:first-child a { color: inherit; }
+.last_verdict .verdict table td:last-child div { text-align: right; background: white; margin: 2px; }
+  .cond_true { color: #008000; }
+  .cond_false { color: #800000; }
+</style>
+<style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1px; bottom: 2px; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+<body><div id="MathJax_Message" style="display: none;"></div>
+
+
+
+<div class="problem_text" id="p2119486" lang="ru">
+  <a name="prB"></a>
+
+  <h2>
+  
+  Задача B. Graph visitor
+  <a class="jsonly problem_menu_trigger" href="#">≡</a>
+  </h2>
+  <div class="jsonly problem_menu"><ul>
+    <li><a class="problem_list_link" href="https://imcs.dvfu.ru/cats/main.pl?f=problems;cid=2069453;sid=X8Qq3anTaGUg2rLuFiTrRFP3UDna0C">список задач</a></li>
+    <li><label><input type="checkbox" class="whitespace"><span></span> видимые пробелы</label></li>
+    <li><label><input type="checkbox" class="basic_math"><span></span> простые формулы</label></li>
+    <li><label><input type="checkbox" class="wide_text"><span></span> широкий текст</label></li>
+    <li class="last_verdict" style="display: none"><span class="verdict">
+      <table><tbody><tr><td><a href="#"></a></td><td><div></div></td></tr></tbody></table>
+    </span></li>
+    
+  </ul></div>
+  <table class="problem_header">  
+  <tbody><tr>
+    <td class="narrow nobr">Входной файл:</td><td>Стандартный вход</td>
+    <td>&nbsp;</td>
+    <td class="narrow nobr">Ограничение времени:</td><td>1 сек</td>
+  </tr>
+  
+  <tr>
+    <td class="narrow nobr">Выходной файл:</td><td>Стандартный выход</td>
+    <td>&nbsp;</td>
+    <td class="narrow nobr">Ограничение памяти:</td><td>4000 Мб</td>
+  </tr>
+  
+  
+  </tbody></table>
+
+  
+    <h3>Условие</h3>
+    
+  <p style="max-width: 1000px;">Реализовать шаблонный класс визитора со следующим интерфейсом для использования в алгоритме поиска в ширину в <em>неориентированном</em> графе.
+  </p>
+  <p style="max-width: 1000px;"></p><pre><code>
+  template&lt;Vertex&gt; 
+  class BfsVisitor {
+    public:
+      void ExamineVertex(const Vertex&amp; vertex);
+      void DiscoverVertex(const Vertex&amp; vertex);
+      
+      size_t DistanceTo(const Vertex&amp; target) const;
+      Vertex Parent(const Vertex&amp; vertex) const;
+  }
+  </code></pre>
+  <p style="max-width: 1000px;"></p>
+  <p style="max-width: 1000px;">
+  Объект данного класса будет использован функцией обхода графа в ширину, аналогичной <a href="https://www.boost.org/doc/libs/1_66_0/libs/graph/doc/breadth_first_search.html">данной</a>. Метод <code> ExamineVertex </code> 
+  будет вызван в момент извлечения вершины из очереди, метод <code>DiscoverVertex</code> будет вызван в момент добавления вершины в очередь.
+  </p>
+  <p style="max-width: 1000px;">
+      После обхода графа визитор должен хранить кратчайшие расстояния от начальной
+      вершины до всех остальных. Для получения расстояния до вершины будет использован метод <code>DistanceTo</code>.
+  </p>
+  <p style="max-width: 1000px;">
+      Также, в процессе обхода в ширину визитор должен построить соответствующее такому обходу остовное дерево графа.
+      Метод <code>Parent</code> будет использован для получения предка каждой вершины в таком графе. <em>Родителем корневой вершины является она сама.</em>
+  </p>
+  <p style="max-width: 1000px;">
+      Экземпляр визитора передается в функцию по значению, и для эффективного копирования
+      его размер должен быть не больше размера <code>shared_ptr</code>.
+  </p>
+
+  
+  
+    
+    
+    
+    
+    
+  
+  <hr>
+</div>
+
+<script type="text/javascript">
+$('.problem_menu_trigger').click(function() { $(this).parent().next().toggle(); return false; });
+
+var sid = (new RegExp('sid=([a-zA-Z0-9]{30})')).exec(window.location.href);
+var uid = (new RegExp('uid=([0-9]+)')).exec(window.location.href);
+if (sid) {
+  sid = sid[1];
+  $('.problem_list_link').each(function() { this.href += ';sid=' + sid; });
+}
+
+function toggle_whitespace() {
+  var p = $(this).parents('.problem_text');
+  var ws = this.checked;
+  p.find('.sample code').each(function() {
+    var t = $(this).text();
+    if (ws)
+      t = t.replace(/ /g, '\u2423');
+    else
+      t = t.replace(/\u2423/g, ' ');
+    $(this).text(t);
+  });
+}
+$('.problem_text div.problem_menu input.whitespace').click(toggle_whitespace).each(toggle_whitespace);
+
+$('.basic_math').click(function() {
+  var p = $(this).parents('.problem_text');
+  if (this.checked)
+    p.find('span.TeX').each(unset_tex);
+  else
+    apply_mathjax(p);
+});
+
+function toggle_wide_text() {
+  var p = $(this).parents('.problem_text');
+  p.children('p, ul, ol').css({ 'max-width': this.checked ? 'none' : '1000px' });
+}
+$('.wide_text').click(toggle_wide_text).each(toggle_wide_text);
+
+$('.problem_text div.problem_menu li.langs a').click(function() {
+  var p = document.location.pathname;
+  if (p.substring(p.length - 5) === '.html') {
+    
+    var n = '-pl-' + this.innerText;
+    document.location.pathname =
+      p.indexOf('-pl-') < 0 ? p.replace('.html', n + '.html') : p.replace(/-pl-[a-z]+/, n);
+  }
+  else {
+    var s = document.location.search;
+    document.location.search =
+      s.indexOf('pl=') < 0  ? s + ';pl=' + this.innerText : s.replace(/pl=[a-z]+/, 'pl=' + this.innerText);
+  }
+});
+if (sid)
+  $(document).ready(function () {
+    $.get('../main.pl?f=api_get_last_verdicts;problem_ids=2119486;sid=' + sid).success(function(result) {
+      if (!result) return;
+      for (var r in result) {
+        if (!result[r]) continue;
+        var v = $('#p' + r + ' .last_verdict > .verdict');
+        v.addClass('run_details_' + result[r][0]);
+        v.find('a').attr('href', '../' + result[r][2]).text(result[r][0]);
+        v.find('div').html(result[r][1] || '.&nbsp;');
+        v.parent().show();
+      }
+    });
+  });
+
+
+</script>
+<span class="timing">0.009s 0.004s 9</span>
+
+
+
+</body></html>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CATS version="1.11">
+<Problem title="Merge" lang="ru" tlimit="1" mlimit="4000M"
+  author="" inputFile="*STDIN" outputFile="*STDOUT"
+  saveInputPrefix="50B" saveOutputPrefix="50B" saveAnswerPrefix="50B">
+<ProblemStatement>
+    <p>Необходимо реализовать функцию <code>merge_associative</code>, которая принимает 2 ассоциативных контейнера и добавляет содержимое второго к первому</p>
+    <p>Возвращает <code>false</code> если операцию можно выполнить (см. далее), иначе возвращает <code>true</code></p>
+    <pre>
+        <code>
+            <![CDATA[template&lt;class Container1, class Container2&gt;]]>
+            bool merge_associative(Container1* c1, const Container2&amp; c2)
+        </code>
+    </pre>
+    <p>С контейнерами имеющимися в стандартной библиотеке C++ можно ознакомиться <a href="https://en.cppreference.com/w/cpp/container">здесь</a></p>
+    <pre> </pre>
+    <p>Операцию можно выполнить если верны 3 условия:</p>
+    <p>1) Оба типа являются ассоциативными контейнерами</p>
+    <p>2) Их типы элементов совпадают, не учитывая <a href="https://en.cppreference.com/w/cpp/language/cv">cv qualifiers</a></p>
+    <p>3) Первый контейнер является мультиконтейнером или оба ими не являются</p>
+    <pre> </pre>
+    <p>Мультиконтейнерами в данном случае названы следующие: <code>multiset, unordered_multiset, multimap, unordered_multimap</code></p>
+    <pre> </pre>
+    <p>Примеры пар типов, для которых операцию выполнить можно:</p>
+    <p><code><![CDATA[multiset&lt;int&gt; + set&lt;int&gt;]]></code></p>
+    <p><code><![CDATA[map&lt;int, int&gt; + unordered_map&lt;int, int&gt;]]></code></p>
+    <p><code><![CDATA[multimap&lt;int, const int&gt; + unordered_map&lt;int, volatile int&gt;]]></code></p>
+    <pre> </pre>
+    <p>Для которых нельзя:</p>
+    <p><code><![CDATA[set&lt;int&gt; + multiset&lt;int&gt;]]></code></p>
+    <p><code><![CDATA[set&lt;int&gt; + set&lt;double&gt;]]></code></p>
+    <p><code><![CDATA[int + double]]></code></p>
+    <pre> </pre>
+</ProblemStatement>
+
+<!--
+<InputFormat>
+    <p>
+    </p>
+</InputFormat>
+-->
+
+<OutputFormat>
+    <p>Файл с решением должен содержать функцию <code>merge_associative</code></p>
+</OutputFormat>
+
+<Linter name="cpplint" stage="before" src="cpplint.py"/>
+
+<Import type="checker" guid="std.nums"/>
+<Module type="solution" src="main.cpp" main="merge_associative.h" de_code="107"></Module>
+
+<Test rank="1"><In>0</In><Out>0</Out></Test>
+
+</Problem>
+</CATS>
